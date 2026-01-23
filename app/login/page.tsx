@@ -58,31 +58,23 @@ export default function LoginPage() {
         <div className="content-wrapper">
           <div className="header">
             <h1 className="logo">Cosmray</h1>
-            <p className="subtitle">很高兴再次见到你！👋</p>
-            <p className="description">请登录以继续使用</p>
+            <p className="subtitle">欢迎回来</p>
           </div>
 
           <div className="card">
             <div className="card-border"></div>
             <h2 className="card-title">登录账户</h2>
-            <p className="card-subtitle">输入你的账户信息以登录</p>
 
             {errorMessage && (
-              <div className="alert alert-error">
-                <span className="alert-icon">⚠️</span>
-                {errorMessage}
-              </div>
+              <div className="alert alert-error">{errorMessage}</div>
             )}
             {successMessage && (
-              <div className="alert alert-success">
-                <span className="alert-icon">✅</span>
-                {successMessage}
-              </div>
+              <div className="alert alert-success">{successMessage}</div>
             )}
 
             <form onSubmit={handleSubmit}>
               <div className="form-group">
-                <label className="form-label">邮箱地址</label>
+                <label className="form-label">邮箱</label>
                 <input
                   type="email"
                   value={email}
@@ -141,14 +133,7 @@ export default function LoginPage() {
               </div>
 
               <button type="submit" className="btn-primary" disabled={isLoading}>
-                {isLoading ? (
-                  <>
-                    <span className="spinner"></span>
-                    <span>正在登录...</span>
-                  </>
-                ) : (
-                  '登录'
-                )}
+                {isLoading ? '登录中...' : '登录'}
               </button>
             </form>
 
@@ -168,35 +153,13 @@ export default function LoginPage() {
             </div>
 
             <p className="footer-text">
-              还没有账户？
-              <Link href="/register" className="footer-link">
-                立即注册
-              </Link>
-              <span className="footer-hint"> - 只需30秒</span>
+              还没有账户？<Link href="/register" className="footer-link">立即注册</Link>
             </p>
-
-            <div className="help-section">
-              <a href="#" onClick={handleForgotPassword} className="help-link">需要帮助？</a>
-            </div>
           </div>
         </div>
       </div>
 
-      <style jsx>{`
-        :root {
-          --bg-primary: #0A1628;
-          --bg-secondary: #1A1A2E;
-          --bg-tertiary: #16213E;
-          --accent-primary: #00D9FF;
-          --accent-secondary: #7B68EE;
-          --text-primary: #F5F5F5;
-          --text-secondary: #B8BCC8;
-          --text-muted: #6C7293;
-          --success: #00F5A0;
-          --error: #EE5A6F;
-          --border-default: rgba(255, 255, 255, 0.1);
-          --shadow-xl: 0 20px 25px rgba(0, 217, 255, 0.2);
-        }
+      <style jsx global>{`
 
         @keyframes float {
           0%, 100% {
@@ -276,19 +239,12 @@ export default function LoginPage() {
           margin-bottom: 8px;
           background: linear-gradient(135deg, #00D9FF 0%, #7B68EE 100%);
           -webkit-background-clip: text;
-          background-clip: text;
           -webkit-text-fill-color: transparent;
+          background-clip: text;
         }
 
         .subtitle {
-          color: var(--text-secondary);
-          font-size: 18px;
-          margin-bottom: 4px;
-        }
-
-        .description {
-          color: var(--text-muted);
-          font-size: 14px;
+          color: #B8BCC8;
         }
 
         .card {
@@ -296,16 +252,16 @@ export default function LoginPage() {
           border-radius: 20px;
           padding: 40px;
           backdrop-filter: blur(20px);
-          background: var(--bg-tertiary);
-          border: 1px solid var(--border-default);
-          box-shadow: var(--shadow-xl);
+          background: #16213E;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          box-shadow: 0 20px 25px rgba(0, 217, 255, 0.2);
         }
 
         .card-border {
           position: absolute;
           inset: -2px;
           border-radius: 20px;
-          opacity: 0.5;
+          opacity: 0.6;
           pointer-events: none;
           background: linear-gradient(135deg, #00D9FF 0%, #7B68EE 100%);
           -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
@@ -318,15 +274,8 @@ export default function LoginPage() {
           font-size: 28px;
           font-weight: 600;
           text-align: center;
-          margin-bottom: 8px;
-          color: var(--text-primary);
-        }
-
-        .card-subtitle {
-          text-align: center;
-          color: var(--text-muted);
-          font-size: 14px;
           margin-bottom: 32px;
+          color: #F5F5F5;
         }
 
         .alert {
@@ -334,14 +283,6 @@ export default function LoginPage() {
           padding: 16px;
           border-radius: 10px;
           font-size: 14px;
-          display: flex;
-          align-items: center;
-          gap: 8px;
-        }
-
-        .alert-icon {
-          font-size: 16px;
-          flex-shrink: 0;
         }
 
         .alert-error {
@@ -364,7 +305,7 @@ export default function LoginPage() {
           display: block;
           font-size: 14px;
           font-weight: 500;
-          color: var(--text-secondary);
+          color: #B8BCC8;
           margin-bottom: 8px;
         }
 
@@ -373,20 +314,20 @@ export default function LoginPage() {
           padding: 14px 16px;
           border-radius: 10px;
           font-size: 16px;
-          color: var(--text-primary);
-          background: rgba(255, 255, 255, 0.05);
-          border: 1px solid var(--border-default);
+          color: #F5F5F5;
+          background: #1A1A2E;
+          border: 1px solid rgba(255, 255, 255, 0.1);
           transition: all 0.3s;
           outline: none;
         }
 
         .form-input::placeholder {
-          color: var(--text-muted);
+          color: #6C7293;
         }
 
         .form-input:focus {
-          border-color: var(--accent-primary);
-          background: rgba(255, 255, 255, 0.08);
+          border-color: #00D9FF;
+          background: rgba(26, 26, 46, 0.8);
           box-shadow: 0 0 0 3px rgba(0, 217, 255, 0.1), 0 0 10px rgba(0, 217, 255, 0.3);
         }
 
@@ -410,7 +351,7 @@ export default function LoginPage() {
           transform: translateY(-50%);
           background: transparent;
           border: none;
-          color: var(--text-muted);
+          color: #6C7293;
           cursor: pointer;
           transition: color 0.3s;
           padding: 0;
@@ -420,7 +361,7 @@ export default function LoginPage() {
         }
 
         .password-toggle:hover {
-          color: var(--text-secondary);
+          color: #B8BCC8;
         }
 
         .password-toggle svg {
@@ -446,18 +387,18 @@ export default function LoginPage() {
           width: 18px;
           height: 18px;
           border-radius: 4px;
-          accent-color: var(--accent-primary);
+          accent-color: #00D9FF;
           cursor: pointer;
         }
 
         .checkbox-label span {
           font-size: 14px;
-          color: var(--text-secondary);
+          color: #B8BCC8;
         }
 
         .forgot-link {
           font-size: 14px;
-          color: var(--accent-primary);
+          color: #00D9FF;
           text-decoration: none;
           transition: opacity 0.3s;
         }
@@ -510,20 +451,6 @@ export default function LoginPage() {
           transform: none;
         }
 
-        .spinner {
-          display: inline-block;
-          width: 16px;
-          height: 16px;
-          border: 2px solid rgba(255, 255, 255, 0.3);
-          border-top-color: white;
-          border-radius: 50%;
-          animation: spin 0.6s linear infinite;
-        }
-
-        @keyframes spin {
-          to { transform: rotate(360deg); }
-        }
-
         .divider {
           display: flex;
           align-items: center;
@@ -534,12 +461,12 @@ export default function LoginPage() {
         .divider-line {
           flex: 1;
           height: 1px;
-          background: var(--border-default);
+          background: rgba(255, 255, 255, 0.1);
         }
 
         .divider-text {
           font-size: 14px;
-          color: var(--text-muted);
+          color: #6C7293;
         }
 
         .social-buttons {
@@ -557,14 +484,14 @@ export default function LoginPage() {
           justify-content: center;
           font-size: 20px;
           background: transparent;
-          border: 1px solid var(--border-default);
-          color: var(--text-primary);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          color: #F5F5F5;
           cursor: pointer;
           transition: all 0.3s;
         }
 
         .btn-social:hover {
-          border-color: var(--accent-primary);
+          border-color: #00D9FF;
           background: rgba(0, 217, 255, 0.05);
           transform: translateY(-2px);
         }
@@ -572,39 +499,17 @@ export default function LoginPage() {
         .footer-text {
           text-align: center;
           font-size: 14px;
-          color: var(--text-secondary);
+          color: #B8BCC8;
         }
 
         .footer-link {
-          color: var(--accent-primary);
+          color: #00D9FF;
           font-weight: 500;
           text-decoration: none;
           margin-left: 4px;
         }
 
         .footer-link:hover {
-          text-decoration: underline;
-        }
-
-        .footer-hint {
-          color: var(--text-muted);
-          font-size: 12px;
-        }
-
-        .help-section {
-          margin-top: 16px;
-          text-align: center;
-        }
-
-        .help-link {
-          color: var(--accent-primary);
-          font-size: 13px;
-          text-decoration: none;
-          transition: opacity 0.3s;
-        }
-
-        .help-link:hover {
-          opacity: 0.8;
           text-decoration: underline;
         }
       `}</style>

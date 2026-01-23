@@ -107,34 +107,23 @@ export default function RegisterPage() {
         <div className="content-wrapper">
           <div className="header">
             <h1 className="logo">Cosmray</h1>
-            <p className="subtitle">欢迎加入我们！🎉</p>
-            <p className="description">创建你的账户，开启精彩旅程</p>
+            <p className="subtitle">创建您的账户</p>
           </div>
 
           <div className="card">
             <div className="card-border"></div>
             <h2 className="card-title">用户注册</h2>
-            <p className="card-subtitle">填写以下信息创建账户，仅需30秒</p>
 
             {errorMessage && (
-              <div className="alert alert-error">
-                <span className="alert-icon">⚠️</span>
-                {errorMessage}
-              </div>
+              <div className="alert alert-error">{errorMessage}</div>
             )}
             {successMessage && (
-              <div className="alert alert-success">
-                <span className="alert-icon">🎉</span>
-                {successMessage}
-              </div>
+              <div className="alert alert-success">{successMessage}</div>
             )}
 
             <form onSubmit={handleSubmit}>
               <div className="form-group">
-                <label className="form-label">
-                  用户名 * 
-                  <span className="label-hint">这将是你的显示名称</span>
-                </label>
+                <label className="form-label">用户名 *</label>
                 <input
                   type="text"
                   name="username"
@@ -152,8 +141,7 @@ export default function RegisterPage() {
 
               <div className="form-group">
                 <label className="form-label">
-                  邮箱地址 * 
-                  <span className="label-hint">用于登录和找回密码</span>
+                  邮箱 * <span className="hint">（用于登录）</span>
                 </label>
                 <input
                   type="email"
@@ -171,10 +159,7 @@ export default function RegisterPage() {
               </div>
 
               <div className="form-group">
-                <label className="form-label">
-                  密码 * 
-                  <span className="label-hint">至少6个字符</span>
-                </label>
+                <label className="form-label">密码 *</label>
                 <div className="password-wrapper">
                   <input
                     type={showPassword ? 'text' : 'password'}
@@ -192,12 +177,12 @@ export default function RegisterPage() {
                     onClick={() => setShowPassword(!showPassword)}
                   >
                     {!showPassword ? (
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <svg className="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                         <circle cx="12" cy="12" r="3"></circle>
                       </svg>
                     ) : (
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <svg className="eye-off-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
                         <line x1="1" y1="1" x2="23" y2="23"></line>
                       </svg>
@@ -228,12 +213,12 @@ export default function RegisterPage() {
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   >
                     {!showConfirmPassword ? (
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <svg className="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                         <circle cx="12" cy="12" r="3"></circle>
                       </svg>
                     ) : (
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <svg className="eye-off-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
                         <line x1="1" y1="1" x2="23" y2="23"></line>
                       </svg>
@@ -262,58 +247,18 @@ export default function RegisterPage() {
               </div>
 
               <button type="submit" className="btn-primary" disabled={isLoading}>
-                {isLoading ? (
-                  <>
-                    <span className="spinner"></span>
-                    <span>正在创建账户...</span>
-                  </>
-                ) : (
-                  '创建账户'
-                )}
+                {isLoading ? '注册中...' : '注册账户'}
               </button>
             </form>
 
-            <div className="register-benefits">
-              <p className="benefits-title">注册即可享受：</p>
-              <ul className="benefits-list">
-                <li>✨ 个性化用户体验</li>
-                <li>🔒 安全的数据保护</li>
-                <li>🚀 更多功能和服务</li>
-              </ul>
-            </div>
-
             <p className="footer-text">
-              已有账户？
-              <Link href="/login" className="footer-link">
-                立即登录
-              </Link>
-            </p>
-
-            <p className="privacy-note">
-              注册即表示你同意我们的
-              <a href="#" className="privacy-link">服务条款</a>
-              和
-              <a href="#" className="privacy-link">隐私政策</a>
+              已有账户？<Link href="/login" className="footer-link">立即登录</Link>
             </p>
           </div>
         </div>
       </div>
 
-      <style jsx>{`
-        :root {
-          --bg-primary: #0A1628;
-          --bg-secondary: #1A1A2E;
-          --bg-tertiary: #16213E;
-          --accent-primary: #00D9FF;
-          --accent-secondary: #7B68EE;
-          --text-primary: #F5F5F5;
-          --text-secondary: #B8BCC8;
-          --text-muted: #6C7293;
-          --success: #00F5A0;
-          --error: #EE5A6F;
-          --border-default: rgba(255, 255, 255, 0.1);
-          --shadow-xl: 0 20px 25px rgba(0, 217, 255, 0.2);
-        }
+      <style jsx global>{`
 
         @keyframes float {
           0%, 100% {
@@ -394,19 +339,12 @@ export default function RegisterPage() {
           margin-bottom: 8px;
           background: linear-gradient(135deg, #00D9FF 0%, #7B68EE 100%);
           -webkit-background-clip: text;
-          background-clip: text;
           -webkit-text-fill-color: transparent;
+          background-clip: text;
         }
 
         .subtitle {
-          color: var(--text-secondary);
-          font-size: 18px;
-          margin-bottom: 4px;
-        }
-
-        .description {
-          color: var(--text-muted);
-          font-size: 14px;
+          color: #B8BCC8;
         }
 
         .card {
@@ -414,16 +352,16 @@ export default function RegisterPage() {
           border-radius: 20px;
           padding: 40px;
           backdrop-filter: blur(20px);
-          background: var(--bg-tertiary);
-          border: 1px solid var(--border-default);
-          box-shadow: var(--shadow-xl);
+          background: #16213E;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          box-shadow: 0 20px 25px rgba(0, 217, 255, 0.2);
         }
 
         .card-border {
           position: absolute;
           inset: -2px;
           border-radius: 20px;
-          opacity: 0.5;
+          opacity: 0.6;
           pointer-events: none;
           background: linear-gradient(135deg, #00D9FF 0%, #7B68EE 100%);
           -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
@@ -436,15 +374,8 @@ export default function RegisterPage() {
           font-size: 28px;
           font-weight: 600;
           text-align: center;
-          margin-bottom: 8px;
-          color: var(--text-primary);
-        }
-
-        .card-subtitle {
-          text-align: center;
-          color: var(--text-muted);
-          font-size: 14px;
           margin-bottom: 32px;
+          color: #F5F5F5;
         }
 
         .alert {
@@ -452,14 +383,6 @@ export default function RegisterPage() {
           padding: 16px;
           border-radius: 10px;
           font-size: 14px;
-          display: flex;
-          align-items: center;
-          gap: 8px;
-        }
-
-        .alert-icon {
-          font-size: 16px;
-          flex-shrink: 0;
         }
 
         .alert-error {
@@ -471,7 +394,7 @@ export default function RegisterPage() {
         .alert-success {
           background: rgba(0, 245, 160, 0.1);
           border: 1px solid rgba(0, 245, 160, 0.2);
-          color: var(--success);
+          color: #00F5A0;
         }
 
         .form-group {
@@ -479,19 +402,16 @@ export default function RegisterPage() {
         }
 
         .form-label {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
+          display: block;
           font-size: 14px;
           font-weight: 500;
-          color: var(--text-secondary);
+          color: #B8BCC8;
           margin-bottom: 8px;
         }
 
-        .label-hint {
+        .form-label .hint {
           font-size: 12px;
-          color: var(--text-muted);
-          font-weight: 400;
+          color: #6C7293;
         }
 
         .form-input {
@@ -499,20 +419,20 @@ export default function RegisterPage() {
           padding: 14px 16px;
           border-radius: 10px;
           font-size: 16px;
-          color: var(--text-primary);
-          background: rgba(255, 255, 255, 0.05);
-          border: 1px solid var(--border-default);
+          color: #F5F5F5;
+          background: #1A1A2E;
+          border: 1px solid rgba(255, 255, 255, 0.1);
           transition: all 0.3s;
           outline: none;
         }
 
         .form-input::placeholder {
-          color: var(--text-muted);
+          color: #6C7293;
         }
 
         .form-input:focus {
-          border-color: var(--accent-primary);
-          background: rgba(255, 255, 255, 0.08);
+          border-color: #00D9FF;
+          background: rgba(26, 26, 46, 0.8);
           box-shadow: 0 0 0 3px rgba(0, 217, 255, 0.1), 0 0 10px rgba(0, 217, 255, 0.3);
         }
 
@@ -522,7 +442,7 @@ export default function RegisterPage() {
         }
 
         .field-error {
-          color: var(--error);
+          color: #EE5A6F;
           font-size: 12px;
           margin-top: 4px;
         }
@@ -542,7 +462,7 @@ export default function RegisterPage() {
           transform: translateY(-50%);
           background: transparent;
           border: none;
-          color: var(--text-muted);
+          color: #6C7293;
           cursor: pointer;
           transition: color 0.3s;
           padding: 0;
@@ -552,7 +472,7 @@ export default function RegisterPage() {
         }
 
         .password-toggle:hover {
-          color: var(--text-secondary);
+          color: #B8BCC8;
         }
 
         .password-toggle svg {
@@ -571,13 +491,13 @@ export default function RegisterPage() {
           width: 18px;
           height: 18px;
           border-radius: 4px;
-          accent-color: var(--accent-primary);
+          accent-color: #00D9FF;
           cursor: pointer;
         }
 
         .checkbox-label span {
           font-size: 14px;
-          color: var(--text-secondary);
+          color: #B8BCC8;
         }
 
         .btn-primary {
@@ -623,79 +543,20 @@ export default function RegisterPage() {
           transform: none;
         }
 
-        .spinner {
-          display: inline-block;
-          width: 16px;
-          height: 16px;
-          border: 2px solid rgba(255, 255, 255, 0.3);
-          border-top-color: white;
-          border-radius: 50%;
-          animation: spin 0.6s linear infinite;
-        }
-
-        @keyframes spin {
-          to { transform: rotate(360deg); }
-        }
-
-        .register-benefits {
-          margin-top: 24px;
-          margin-bottom: 24px;
-          padding: 20px;
-          background: rgba(0, 217, 255, 0.05);
-          border: 1px solid var(--border-default);
-          border-radius: 10px;
-        }
-
-        .benefits-title {
-          color: var(--text-secondary);
-          font-size: 14px;
-          font-weight: 500;
-          margin-bottom: 12px;
-        }
-
-        .benefits-list {
-          list-style: none;
-          padding: 0;
-          margin: 0;
-        }
-
-        .benefits-list li {
-          color: var(--text-secondary);
-          font-size: 13px;
-          padding: 6px 0;
-        }
-
         .footer-text {
           text-align: center;
           font-size: 14px;
-          color: var(--text-secondary);
+          color: #B8BCC8;
         }
 
         .footer-link {
-          color: var(--accent-primary);
+          color: #00D9FF;
           font-weight: 500;
           text-decoration: none;
           margin-left: 4px;
         }
 
         .footer-link:hover {
-          text-decoration: underline;
-        }
-
-        .privacy-note {
-          text-align: center;
-          font-size: 12px;
-          color: var(--text-muted);
-          margin-top: 16px;
-        }
-
-        .privacy-link {
-          color: var(--accent-primary);
-          text-decoration: none;
-          margin: 0 2px;
-        }
-
-        .privacy-link:hover {
           text-decoration: underline;
         }
       `}</style>
