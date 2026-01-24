@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Next.js Hello World",
-  description: "A simple Next.js application",
+  title: "Cosmray",
+  description: "欢迎来到 Cosmray - 未来科技平台",
 };
 
 export default function RootLayout({

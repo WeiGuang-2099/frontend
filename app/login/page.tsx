@@ -1,0 +1,135 @@
+'use client';
+
+import { useState } from 'react';
+import Link from 'next/link';
+import AuthLayout from '../components/AuthLayout';
+import FormInput from '../components/FormInput';
+import PasswordInput from '../components/PasswordInput';
+import Alert from '../components/Alert';
+import Button from '../components/Button';
+
+export default function LoginPage() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [remember, setRemember] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrorMessage('');
+    setSuccessMessage('');
+
+    if (!email || !password) {
+      setErrorMessage('请填写邮箱和密码');
+      return;
+    }
+
+    if (!/^\S+@\S+\.\S+$/.test(email)) {
+      setErrorMessage('请输入有效的邮箱地址');
+      return;
+    }
+
+    setIsLoading(true);
+
+    // 模拟登录请求
+    setTimeout(() => {
+      setSuccessMessage('登录成功！正在跳转...');
+      setTimeout(() => {
+        alert('演示模式：登录成功后将跳转到首页');
+        setIsLoading(false);
+      }, 1500);
+    }, 1000);
+  };
+
+  const handleSocialLogin = (provider: string) => {
+    alert(`${provider}功能暂未开放，敬请期待！`);
+  };
+
+  const handleForgotPassword = (e: React.MouseEvent) => {
+    e.preventDefault();
+    alert('忘记密码功能暂未开放，请联系管理员！');
+  };
+
+  return (
+    <AuthLayout title="登录账户" subtitle="欢迎回来">
+      {errorMessage && <Alert type="error">{errorMessage}</Alert>}
+      {successMessage && <Alert type="success">{successMessage}</Alert>}
+
+      <form onSubmit={handleSubmit}>
+        <FormInput
+          type="email"
+          label="邮箱"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="请输入邮箱地址"
+          required
+          disabled={isLoading}
+        />
+
+        <PasswordInput
+          label="密码"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="请输入密码"
+          required
+          disabled={isLoading}
+        />
+
+        <div className="flex items-center justify-between mb-6">
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={remember}
+              onChange={(e) => setRemember(e.target.checked)}
+              className="w-[18px] h-[18px] rounded accent-[#00D9FF] cursor-pointer"
+            />
+            <span className="text-sm text-[#c9d1d9]">记住我</span>
+          </label>
+          <a
+            href="#"
+            onClick={handleForgotPassword}
+            className="text-sm text-[#00D9FF] no-underline transition-opacity hover:opacity-80 hover:underline"
+          >
+            忘记密码？
+          </a>
+        </div>
+
+        <Button type="submit" disabled={isLoading}>
+          {isLoading ? '登录中...' : '登录'}
+        </Button>
+      </form>
+
+      <div className="flex items-center gap-4 mb-6">
+        <div className="flex-1 h-[1px] bg-white/10" />
+        <span className="text-sm text-[#8b949e]">其他登录方式</span>
+        <div className="flex-1 h-[1px] bg-white/10" />
+      </div>
+
+      <div className="grid grid-cols-2 gap-4 mb-6">
+        <Button
+          variant="social"
+          onClick={() => handleSocialLogin('Google登录')}
+          title="Google登录"
+        >
+          🔍
+        </Button>
+        <Button
+          variant="social"
+          onClick={() => handleSocialLogin('邮箱登录')}
+          title="邮箱登录"
+        >
+          📧
+        </Button>
+      </div>
+
+      <p className="text-center text-sm text-[#c9d1d9]">
+        还没有账户？
+        <Link href="/register" className="text-[#00D9FF] font-medium no-underline ml-1 hover:underline">
+          立即注册
+        </Link>
+      </p>
+    </AuthLayout>
+  );
+}
