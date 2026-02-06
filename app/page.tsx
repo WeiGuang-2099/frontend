@@ -1,8 +1,13 @@
 'use client';
 
 import Link from 'next/link';
+import { useAuth } from '@/contexts/AuthContext';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
+  const { isAuthenticated, user } = useAuth();
+  const router = useRouter();
+
   return (
     <>
       <div className="page-container">
@@ -13,7 +18,9 @@ export default function Home() {
         <div className="content-wrapper">
           <div className="header">
             <h1 className="logo">Cosmray</h1>
-            <p className="subtitle">你好！欢迎回来 👋</p>
+            <p className="subtitle">
+              {isAuthenticated ? `你好，${user?.username}！👋` : '你好！欢迎回来 👋'}
+            </p>
             <p className="description">开始你的数字之旅</p>
           </div>
 
@@ -23,20 +30,48 @@ export default function Home() {
             <p className="card-description">选择下方操作继续</p>
 
             <div className="button-group">
-              <Link href="/login" className="btn-primary">
-                <span className="btn-icon">🔐</span>
-                <span className="btn-content">
-                  <span className="btn-text">登录账户</span>
-                  <span className="btn-hint">已有账户？点击这里登录</span>
-                </span>
-              </Link>
-              <Link href="/register" className="btn-secondary">
-                <span className="btn-icon">✨</span>
-                <span className="btn-content">
-                  <span className="btn-text">注册新账户</span>
-                  <span className="btn-hint">首次使用？创建一个新账户</span>
-                </span>
-              </Link>
+              {isAuthenticated ? (
+                <>
+                  <Link href="/dashboard" className="btn-primary">
+                    <span className="btn-icon">📊</span>
+                    <span className="btn-content">
+                      <span className="btn-text">进入仪表盘</span>
+                      <span className="btn-hint">查看您的个人中心</span>
+                    </span>
+                  </Link>
+                  <button 
+                    onClick={() => {
+                      if (confirm('确定要退出登录吗？')) {
+                        router.push('/login');
+                      }
+                    }}
+                    className="btn-secondary"
+                  >
+                    <span className="btn-icon">🚪</span>
+                    <span className="btn-content">
+                      <span className="btn-text">退出登录</span>
+                      <span className="btn-hint">登出当前账户</span>
+                    </span>
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link href="/login" className="btn-primary">
+                    <span className="btn-icon">🔐</span>
+                    <span className="btn-content">
+                      <span className="btn-text">登录账户</span>
+                      <span className="btn-hint">已有账户？点击这里登录</span>
+                    </span>
+                  </Link>
+                  <Link href="/register" className="btn-secondary">
+                    <span className="btn-icon">✨</span>
+                    <span className="btn-content">
+                      <span className="btn-text">注册新账户</span>
+                      <span className="btn-hint">首次使用？创建一个新账户</span>
+                    </span>
+                  </Link>
+                </>
+              )}
             </div>
 
             <div className="help-section">
