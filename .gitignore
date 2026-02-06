@@ -4,30 +4,55 @@
 /node_modules
 /.pnp
 .pnp.js
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
 .yarn/install-state.gz
 
 # testing
 /coverage
+/.nyc_output
+/test-results/
+/playwright-report/
+/playwright/.cache/
 
 # next.js
 /.next/
 /out/
+.next
 
 # production
 /build
+/dist
 
 # misc
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
 *.pem
+Thumbs.db
+Desktop.ini
 
 # debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
 # local env files
-.env*.local
 .env
+.env*.local
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
 # vercel
 .vercel
@@ -36,26 +61,112 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# turbopack
+.turbo
+
 # IDE
-.vscode
-.idea
-.cursor
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+.cursor/
 *.swp
 *.swo
 *~
+.project
+.settings/
 
-# OS
-Thumbs.db
+# Editor directories and files
+.history/
+*.sublime-workspace
+*.sublime-project
 
 # Lock files (optional - uncomment if you want to ignore them)
 # package-lock.json
 # yarn.lock
 # pnpm-lock.yaml
+# bun.lockb
 
 # Logs
 *.log
+logs/
+*.log.*
 
 # Temporary files
 .temp
 .tmp
 .cache
+*.cache
+
+# PWA files
+**/public/workbox-*.js
+**/public/sw.js
+**/public/worker-*.js
+**/public/fallback-*.js
+
+# Sentry
+.sentryclirc
+.sentry-*
+
+# Storybook
+storybook-static
+.storybook-out
+
+# Backup files
+*.bak
+*.backup
+*.old
+*.orig
+
+# Generated files
+/generated
+*.generated.*
+
+# Local development
+.dev
+.local
+local/
+
+# E2E testing
+/e2e/screenshots/
+/e2e/videos/
+
+# Local development scripts
+start.ps1
+start.sh
+dev.ps1
+dev.sh
+
+# Security and sensitive files
+*.key
+*.cert
+*.crt
+*.p12
+*.pfx
+secrets/
+credentials/
+.aws/
+.secrets/
+
+# OS specific
+*.lnk
+desktop.ini
+
+# Database
+*.sqlite
+*.sqlite3
+*.db
+
+# Deployment
+.serverless/
+.framework/
+.aws-sam/
+
+# Misc for Windows
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
