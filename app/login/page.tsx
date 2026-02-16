@@ -1,15 +1,20 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import AuthLayout from '../components/AuthLayout';
 import FormInput from '../components/FormInput';
 import PasswordInput from '../components/PasswordInput';
 import Alert from '../components/Alert';
 import Button from '../components/Button';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('');
+  const router = useRouter();
+  const { login } = useAuth();
+  
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [remember, setRemember] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -21,26 +26,39 @@ export default function LoginPage() {
     setErrorMessage('');
     setSuccessMessage('');
 
-    if (!email || !password) {
-      setErrorMessage('请填写邮箱和密码');
+    // 表单验证
+    if (!username || !password) {
+      setErrorMessage('请填写用户名和密码');
       return;
     }
 
-    if (!/^\S+@\S+\.\S+$/.test(email)) {
-      setErrorMessage('请输入有效的邮箱地址');
+    if (username.length < 3) {
+      setErrorMessage('用户名至少需要3个字符');
+      return;
+    }
+
+    if (password.length < 6) {
+      setErrorMessage('密码至少需要6个字符');
       return;
     }
 
     setIsLoading(true);
 
-    // 模拟登录请求
-    setTimeout(() => {
+    try {
+      // 调用登录 API
+      await login(username, password);
+      
       setSuccessMessage('登录成功！正在跳转...');
+      
+      // 登录成功后跳转到首页
       setTimeout(() => {
-        alert('演示模式：登录成功后将跳转到首页');
-        setIsLoading(false);
-      }, 1500);
-    }, 1000);
+        router.push('/');
+      }, 1000);
+    } catch (error: any) {
+      setErrorMessage(error.message || '登录失败，请检查用户名和密码');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleSocialLogin = (provider: string) => {
@@ -59,11 +77,11 @@ export default function LoginPage() {
 
       <form onSubmit={handleSubmit}>
         <FormInput
-          type="email"
-          label="邮箱"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="请输入邮箱地址"
+          type="text"
+          label="用户名"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          placeholder="请输入用户名"
           required
           disabled={isLoading}
         />

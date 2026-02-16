@@ -8,9 +8,11 @@ import FormInput from '../components/FormInput';
 import PasswordInput from '../components/PasswordInput';
 import Alert from '../components/Alert';
 import Button from '../components/Button';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function RegisterPage() {
   const router = useRouter();
+  const { register } = useAuth();
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -91,13 +93,21 @@ export default function RegisterPage() {
 
     setIsLoading(true);
 
-    // 模拟注册请求
-    setTimeout(() => {
-      setSuccessMessage('注册成功！正在跳转到登录页面...');
+    try {
+      // 调用注册 API
+      await register(formData.username, formData.email, formData.password);
+      
+      setSuccessMessage('注册成功！正在跳转到首页...');
+      
+      // 注册成功后跳转到首页
       setTimeout(() => {
-        router.push('/login');
-      }, 2000);
-    }, 1000);
+        router.push('/');
+      }, 1000);
+    } catch (error: any) {
+      setErrorMessage(error.message || '注册失败，请稍后重试');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
