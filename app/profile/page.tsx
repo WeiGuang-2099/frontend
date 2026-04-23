@@ -152,7 +152,7 @@ export default function ProfilePage() {
   }
 
   const handleAgentChat = (agent: AgentResponse) => {
-    alert(`数字人"${agent.name}"对话功能开发中，敬请期待！`)
+    router.push(`/chat/${agent.id}`)
   }
 
   const filteredAgents = agents.filter(
