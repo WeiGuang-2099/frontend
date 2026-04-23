@@ -311,6 +311,15 @@ export default function HomeClient() {
                         <div className="flex gap-2">
                           <button
                             className="p-1.5 rounded bg-bg-secondary border border-default text-text-secondary cursor-pointer transition-all duration-200 flex items-center justify-center hover:bg-bg-primary hover:border-accent-primary hover:text-accent-primary"
+                            onClick={(e) => { e.stopPropagation(); router.push(`/knowledge/${agent.id}`) }}
+                            title="Knowledge Graph"
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                            </svg>
+                          </button>
+                          <button
+                            className="p-1.5 rounded bg-bg-secondary border border-default text-text-secondary cursor-pointer transition-all duration-200 flex items-center justify-center hover:bg-bg-primary hover:border-accent-primary hover:text-accent-primary"
                             onClick={(e) => handleEditAgent(agent, e)}
                             title="编辑"
                           >
