@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git checkout:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Read(//c/Users/lenovo/Desktop/task/task-real/ai-agents-frontend/app/**)",
+      "Read(//c/Users/lenovo/Desktop/task/task-real/ai-agents-frontend/app/register/**)",
+      "Read(//c/Users/lenovo/Desktop/task/task-real/ai-agents-frontend/app/login/**)",
+      "Read(//c/Users/lenovo/Desktop/task/task-real/ai-agents-frontend/app/profile/**)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(taskkill:*)"
+    ]
+  }
+}
