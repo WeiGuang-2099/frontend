@@ -2,43 +2,233 @@
 @tailwind components;
 @tailwind utilities;
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
+@layer base {
+  :root {
+    --bg-primary: #0A1628;
+    --bg-secondary: #1A1A2E;
+    --bg-tertiary: #16213E;
+    --bg-overlay: rgba(10, 22, 40, 0.85);
 
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-}
+    --accent-primary: #00D9FF;
+    --accent-secondary: #7B68EE;
+    --accent-gradient: linear-gradient(135deg, #00D9FF 0%, #7B68EE 100%);
 
-body {
-  color: #F5F5F5;
-  background: #0A1628;
-}
+    --text-primary: #F5F5F5;
+    --text-secondary: #B8BCC8;
+    --text-muted: #6C7293;
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
+    --success: #00F5A0;
+    --warning: #F7B731;
+    --error: #EE5A6F;
+    --info: #4FACFE;
 
-@keyframes float {
-  0%, 100% {
-    transform: translate(0, 0) scale(1);
+    --border-default: rgba(255, 255, 255, 0.1);
+    --border-hover: rgba(255, 255, 255, 0.2);
+    --border-focus: var(--accent-primary);
+
+    --shadow-sm: 0 1px 3px rgba(0, 217, 255, 0.05);
+    --shadow-md: 0 4px 6px rgba(0, 217, 255, 0.1);
+    --shadow-lg: 0 10px 15px rgba(0, 217, 255, 0.15);
+    --shadow-xl: 0 20px 25px rgba(0, 217, 255, 0.2);
+    --glow-sm: 0 0 10px rgba(0, 217, 255, 0.3);
+    --glow-md: 0 0 20px rgba(0, 217, 255, 0.4);
+
+    --duration-fast: 150ms;
+    --duration-normal: 300ms;
+    --duration-slow: 500ms;
+    --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
   }
-  50% {
-    transform: translate(30px, -30px) scale(1.1);
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html, body {
+    font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    overflow-x: hidden;
   }
 }
 
-@keyframes float-reverse {
-  0%, 100% {
-    transform: translate(0, 0) scale(1);
+/* 特殊效果类 - 无法用 Tailwind 实现 */
+@layer components {
+  /* 渐变文字 */
+  .gradient-text {
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
-  50% {
-    transform: translate(-30px, 30px) scale(1.1);
+
+  /* 渐变按钮带闪光效果 */
+  .btn-gradient {
+    background: var(--accent-gradient);
+    color: #FFFFFF !important;
+    font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-gradient::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s;
+  }
+
+  .btn-gradient:hover::before {
+    left: 100%;
+  }
+
+  /* 背景装饰效果 */
+  .bg-effect-1 {
+    position: fixed;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0, 217, 255, 0.1) 0%, transparent 70%);
+    top: -300px;
+    right: -300px;
+    pointer-events: none;
+  }
+
+  .bg-effect-2 {
+    position: fixed;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(123, 104, 238, 0.1) 0%, transparent 70%);
+    bottom: -200px;
+    left: -200px;
+    pointer-events: none;
+  }
+
+  /* 网格背景 */
+  .grid-bg {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgba(0, 217, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 217, 255, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+
+  /* 头像旋转光环 */
+  .avatar-ring {
+    position: absolute;
+    inset: -50%;
+    background: conic-gradient(from 0deg, transparent, var(--accent-primary), transparent 30%);
+    animation: spin 3s linear infinite;
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
+  /* 激活指示器 */
+  .active-indicator {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--accent-gradient);
+    border-radius: 2px;
+    box-shadow: 0 0 8px var(--accent-primary);
+  }
+
+  /* 导航栏下划线动画 */
+  .nav-underline {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(to right, var(--accent-primary), var(--accent-secondary));
+    border-radius: 9999px;
+    box-shadow: 0 0 8px var(--accent-primary);
+    animation: underlineSlide 0.4s ease-out forwards;
+  }
+
+  @keyframes underlineSlide {
+    from {
+      opacity: 0;
+      transform: scaleX(0);
+    }
+    to {
+      opacity: 1;
+      transform: scaleX(1);
+    }
+  }
+
+  /* 标题指示器 */
+  .title-indicator {
+    width: 4px;
+    height: 20px;
+    background: var(--accent-gradient);
+    border-radius: 2px;
+  }
+
+  /* 输入框聚焦效果 */
+  .input-focus {
+    box-shadow: 0 0 0 3px rgba(0, 217, 255, 0.1), 0 0 10px rgba(0, 217, 255, 0.3);
+  }
+
+  /* 自定义阴影 */
+  .shadow-custom-sm {
+    box-shadow: var(--shadow-sm);
+  }
+
+  .shadow-custom-md {
+    box-shadow: var(--shadow-md);
+  }
+
+  .shadow-custom-lg {
+    box-shadow: var(--shadow-lg);
+  }
+
+  .shadow-custom-xl {
+    box-shadow: var(--shadow-xl);
+  }
+
+  .shadow-glow-sm {
+    box-shadow: var(--glow-sm);
+  }
+
+  .shadow-glow-md {
+    box-shadow: var(--glow-md);
+  }
+
+  /* 旋转动画 */
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* 淡入动画 */
+  .animate-fadeIn {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
   }
 }
+
