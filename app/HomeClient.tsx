@@ -96,7 +96,7 @@ export default function HomeClient() {
   }
 
   const handleAgentClick = (agent: AgentResponse) => {
-    alert(`数字人"${agent.name}"对话功能开发中，敬请期待！`)
+    router.push(`/chat/${agent.id}`)
   }
 
   const handleCreateAgent = (e?: { preventDefault: () => void }) => {
