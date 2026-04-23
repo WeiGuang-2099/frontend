@@ -41,7 +41,8 @@ export function ConversationList({ conversations, activeId, onSelect, onNew, onD
                 </span>
                 <button
                   onClick={(e) => { e.stopPropagation(); onDelete(conv) }}
-                  className="text-text-muted hover:text-error text-xs opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer ml-2"
+                  className="text-text-muted hover:text-error text-xs opacity-50 group-hover:opacity-100 md:opacity-0 transition-opacity cursor-pointer ml-2"
+                  aria-label="删除对话"
                 >
                   x
                 </button>

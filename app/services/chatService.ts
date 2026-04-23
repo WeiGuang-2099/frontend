@@ -2,15 +2,25 @@ import type { Conversation, Message, ConversationCreate } from '../types/chat'
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://127.0.0.1:8000'
 
+function getToken(): string {
+  if (typeof window === 'undefined') return ''
+  return localStorage.getItem('access_token') || sessionStorage.getItem('access_token') || ''
+}
+
 function getAuthHeaders(): HeadersInit {
-  const token =
-    (typeof window !== 'undefined' && localStorage.getItem('access_token')) ||
-    (typeof window !== 'undefined' && sessionStorage.getItem('access_token')) ||
-    ''
   return {
     'Content-Type': 'application/json',
-    Authorization: `Bearer ${token}`,
+    Authorization: `Bearer ${getToken()}`,
   }
+}
+
+async function handleResponse<T>(response: Response): Promise<T> {
+  if (!response.ok) {
+    const errorBody = await response.text().catch(() => '')
+    throw new Error(`HTTP ${response.status}: ${errorBody || response.statusText}`)
+  }
+  const json = await response.json()
+  return json.data
 }
 
 export const chatService = {
@@ -20,8 +30,7 @@ export const chatService = {
       headers: getAuthHeaders(),
       body: JSON.stringify(data),
     })
-    const json = await response.json()
-    return json.data
+    return handleResponse<Conversation>(response)
   },
 
   async getConversations(agentId?: number, skip = 0, limit = 50): Promise<Conversation[]> {
@@ -30,8 +39,7 @@ export const chatService = {
       headers: getAuthHeaders(),
       body: JSON.stringify({ agent_id: agentId, skip, limit }),
     })
-    const json = await response.json()
-    return json.data
+    return handleResponse<Conversation[]>(response)
   },
 
   async getMessages(conversationId: number): Promise<Message[]> {
@@ -39,8 +47,7 @@ export const chatService = {
       method: 'GET',
       headers: getAuthHeaders(),
     })
-    const json = await response.json()
-    return json.data
+    return handleResponse<Message[]>(response)
   },
 
   async deleteConversation(conversationId: number): Promise<boolean> {
@@ -49,8 +56,7 @@ export const chatService = {
       headers: getAuthHeaders(),
       body: JSON.stringify({ conversation_id: conversationId }),
     })
-    const json = await response.json()
-    return json.data
+    return handleResponse<boolean>(response)
   },
 
   streamChat(
@@ -60,12 +66,9 @@ export const chatService = {
     onDone: () => void,
     onError: (error: string) => void,
   ): () => void {
-    const token =
-      localStorage.getItem('access_token') ||
-      sessionStorage.getItem('access_token') ||
-      ''
-
+    const token = getToken()
     const controller = new AbortController()
+    let doneCalled = false
 
     fetch(`${API_BASE}/api/v1/chat/conversations/${conversationId}/stream`, {
       method: 'POST',
@@ -105,7 +108,7 @@ export const chatService = {
                 if (parsed.token) {
                   onToken(parsed.token)
                 } else if (parsed.status === 'complete') {
-                  onDone()
+                  if (!doneCalled) { doneCalled = true; onDone() }
                 } else if (parsed.error) {
                   onError(parsed.error)
                 }
@@ -115,7 +118,8 @@ export const chatService = {
             }
           }
         }
-        onDone()
+        // Only call onDone if the server didn't send explicit complete event
+        if (!doneCalled) { doneCalled = true; onDone() }
       })
       .catch((err) => {
         if (err.name !== 'AbortError') {

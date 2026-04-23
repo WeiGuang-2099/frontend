@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import Link from 'next/link'
 import { chatService } from '../../services/chatService'
@@ -24,6 +24,17 @@ export default function ChatPage() {
   const [streamingContent, setStreamingContent] = useState('')
   const [isStreaming, setIsStreaming] = useState(false)
   const [deleteConfirm, setDeleteConfirm] = useState<Conversation | null>(null)
+
+  // Track abort function for active stream
+  const abortStreamRef = useRef<(() => void) | null>(null)
+
+  // Abort stream on unmount
+  useEffect(() => {
+    return () => {
+      abortStreamRef.current?.()
+      abortStreamRef.current = null
+    }
+  }, [])
 
   // Auth check + load agent
   useEffect(() => {
@@ -64,7 +75,10 @@ export default function ChatPage() {
   // Load messages when switching conversation
   useEffect(() => {
     if (!activeConvId) { setMessages([]); return }
-    chatService.getMessages(activeConvId).then(setMessages).catch(console.error)
+    chatService.getMessages(activeConvId).then(setMessages).catch((err) => {
+      console.error('Failed to load messages:', err)
+      setMessages([])
+    })
   }, [activeConvId])
 
   // Create new conversation
@@ -95,7 +109,7 @@ export default function ChatPage() {
   // Send message
   const handleSend = async (content: string) => {
     if (!activeConvId) {
-      // Auto-create conversation on first message
+      // Auto-create conversation on first message (no setTimeout)
       try {
         const conv = await chatService.createConversation({
           agent_id: agentId,
@@ -103,22 +117,23 @@ export default function ChatPage() {
         })
         setConversations((prev) => [conv, ...prev])
         setActiveConvId(conv.id)
-
-        // Small delay to ensure conversation exists on server
-        await new Promise((r) => setTimeout(r, 100))
-        await doStream(conv.id, content)
+        // Start streaming immediately -- conversation is already persisted by create endpoint
+        doStream(conv.id, content)
       } catch {
         alert('Failed to start conversation')
       }
       return
     }
-    await doStream(activeConvId, content)
+    doStream(activeConvId, content)
   }
 
   const doStream = (convId: number, content: string) => {
-    // Add optimistic user message
+    // Abort any previous stream
+    abortStreamRef.current?.()
+
+    // Add optimistic user message with negative ID to avoid collision
     const optimisticMsg: Message = {
-      id: Date.now(),
+      id: -Date.now(),
       conversation_id: convId,
       role: 'user',
       content,
@@ -129,25 +144,28 @@ export default function ChatPage() {
     setStreamingContent('')
     setIsStreaming(true)
 
-    chatService.streamChat(
+    const abort = chatService.streamChat(
       convId,
       content,
       (token) => setStreamingContent((prev) => prev + token),
       () => {
         setIsStreaming(false)
+        abortStreamRef.current = null
         // Reload messages to get persisted IDs
         chatService.getMessages(convId).then((msgs) => {
           setMessages(msgs)
           setStreamingContent('')
-        })
-        loadConversations() // refresh title/order
+        }).catch(console.error)
+        loadConversations()
       },
       (error) => {
         setIsStreaming(false)
         setStreamingContent('')
+        abortStreamRef.current = null
         alert(`Stream error: ${error}`)
       },
     )
+    abortStreamRef.current = abort
   }
 
   if (!agent) {
@@ -159,7 +177,7 @@ export default function ChatPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="h-screen flex flex-col">
       <div className="grid-bg" />
 
       {/* Top nav */}
@@ -195,8 +213,8 @@ export default function ChatPage() {
       {deleteConfirm && (
         <ConfirmDialog
           isOpen={true}
-          title="Delete Conversation"
-          message="Are you sure you want to delete this conversation?"
+          title="删除对话"
+          message="确定要删除这个对话吗？"
           type="danger"
           onConfirm={handleDeleteConversation}
           onCancel={() => setDeleteConfirm(null)}
